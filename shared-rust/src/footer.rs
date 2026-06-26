@@ -12,6 +12,9 @@ pub struct FooterProps {
     pub github_url: Option<String>,
     
     #[prop_or_default]
+    pub version_url: Option<String>,
+    
+    #[prop_or_default]
     pub children: Html,
 }
 
@@ -23,8 +26,16 @@ pub fn footer(props: &FooterProps) -> Html {
         <footer class="layout-footer">
             <div class="footer-left">
                 {if props.show_version {
-                    html! {
-                        <span class="footer-version">{format!("v{}", props.version)}</span>
+                    if let Some(ref url) = props.version_url {
+                        html! {
+                            <a class="footer-version-link" href={url.clone()} target="_blank" rel="noopener noreferrer" title="View Release Notes">
+                                {format!("v{}", props.version)}
+                            </a>
+                        }
+                    } else {
+                        html! {
+                            <span class="footer-version">{format!("v{}", props.version)}</span>
+                        }
                     }
                 } else {
                     html! {}

@@ -40,11 +40,21 @@ footer.layout-footer {
     align-items: center;
 }
 
-.footer-version {
+.footer-version, .footer-version-link {
     font-size: 0.85rem;
     color: var(--text-secondary);
     font-weight: 500;
     opacity: 0.8;
+}
+
+.footer-version-link {
+    text-decoration: none;
+    transition: opacity var(--transition), color var(--transition);
+}
+
+.footer-version-link:hover {
+    opacity: 1;
+    color: var(--primary);
 }
 
 .footer-github-link {
