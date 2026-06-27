@@ -1,7 +1,7 @@
 //! Shared header component — title bar with theme/language/print/logout controls.
 
-use crate::i18n::strings::{lookup, StringKey};
 use crate::i18n::Language;
+use crate::i18n::strings::{StringKey, lookup};
 use crate::theme::Theme;
 use yew::prelude::*;
 

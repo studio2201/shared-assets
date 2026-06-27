@@ -1,8 +1,8 @@
 [package]
 name = "shared-assets"
-version = "2.1.1"
-edition = "2021"
-description = "Shared UI components, theme management, and backend helpers for UberMetroid companion apps."
+version = "3.0.0"
+edition = "2024"
+description = "Shared UI components, backend primitives, theme management, and middleware for UberMetroid companion apps."
 license = "Apache-2.0"
 repository = "https://github.com/UberMetroid/shared-assets"
 readme = "README.md"
@@ -15,12 +15,22 @@ default = ["frontend"]
 frontend = ["dep:yew", "dep:web-sys", "dep:serde"]
 
 [dependencies]
+# Backend dependencies (always available).
+axum = "0.8"
+ipnet = "2.9"
 serde = { version = "1.0", features = ["derive"], optional = true }
-# `^` allows patch updates; an exact pin here caused conflicts in consumer
-# crates. `>=0.3.98` keeps the HtmlSelectElement API we depend on.
+thiserror = "2.0"
+anyhow = "1.0"
+dotenvy = "0.15"
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+http-body-util = "0.1"
+tokio = { version = "1", features = ["signal", "net", "macros"] }
+tracing = "0.1"
+constant_time_eq = "0.3"
+
+# Frontend-only dependencies (gated by `frontend` feature).
 web-sys = { version = ">=0.3.98, <0.4", features = ["Window", "Document", "HtmlSelectElement", "Event"], optional = true }
 yew = { version = "0.23", features = ["csr"], optional = true }
 
 [dev-dependencies]
-# Reserved for future integration tests (e.g. snapshot tests of rendered
-# Yew components). Currently all tests are inline `#[cfg(test)] mod tests`.
+tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread", "time"] }

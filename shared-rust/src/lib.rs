@@ -1,33 +1,46 @@
 //! Shared code for UberMetroid companion apps.
 //!
-//! Provides Yew components (frontend), i18n, theme management,
-//! and backend security helpers consumed via a Cargo path/git dependency.
+//! Provides:
 //!
-//! ## Public API
+//! - Yew components (frontend): [`components::Header`], [`components::Footer`]
+//! - Theme management: [`theme::Theme`], [`theme::mapping::Scheme`]
+//! - Internationalization: [`i18n::Language`], [`i18n::strings::lookup`]
+//! - Backend primitives: [`server::ServerConfig`], [`server::serve`]
+//! - Authentication: [`auth::pin_auth_layer`], [`auth::attempts`]
+//! - Shared middleware: [`middleware::cors_layer`], [`middleware::security_headers_layer`],
+//!   [`middleware::title_injection_layer`], [`middleware::hsts_layer`]
+//! - Security helpers: [`security::print_unauthorized_console_message`]
 //!
-//! ### Frontend (gated by `frontend` feature, enabled by default)
+//! ## Cargo dependency
 //!
-//! - [`components::Header`], [`components::Footer`] — shared UI chrome
-//! - [`theme::Theme`] — Super Metroid theme enum
-//! - [`i18n::Language`] — supported interface languages
-//! - [`i18n::strings`] — centralized UI string lookup
+//! ```toml
+//! [dependencies]
+//! shared-assets = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.0" }
+//! ```
 //!
-//! ### Backend (always available)
+//! ## Example: minimal backend
 //!
-//! - [`security::print_unauthorized_console_message`] — anti-shell alert
+//! ```no_run
+//! use shared_assets::server::{ServerConfig, serve};
+//! use shared_assets::middleware::{cors_layer, security_headers_layer};
+//! use axum::{Router, routing::get};
 //!
-//! ## Example
+//! async fn run() {
+//!     let config = ServerConfig::from_env("BEAM");
+//!     let app = Router::new()
+//!         .route("/health", get(|| async { "ok" }))
+//!         .layer(axum::middleware::from_fn(security_headers_layer))
+//!         .layer(cors_layer(&config));
 //!
-//! ```rust,no_run
-//! use shared_assets::security;
-//!
-//! // Used in custom `sh` binary stubs to block shell access inside Nix
-//! // containers while still emitting a friendly message.
-//! security::print_unauthorized_console_message();
+//!     serve(config, app).await.unwrap();
+//! }
 //! ```
 
+pub mod auth;
 pub mod i18n;
+pub mod middleware;
 pub mod security;
+pub mod server;
 
 #[cfg(feature = "frontend")]
 pub mod components;
@@ -36,8 +49,5 @@ pub mod components;
 pub mod theme;
 
 // Re-exports for ergonomics.
-//
-// `shared_assets::Header` is more discoverable than
-// `shared_assets::components::header::Header`.
 #[cfg(feature = "frontend")]
 pub use components::{footer::Footer, header::Header};

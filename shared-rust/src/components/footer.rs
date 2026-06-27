@@ -1,7 +1,7 @@
 //! Shared footer component — version, optional children, optional GitHub link.
 
-use crate::i18n::strings::{lookup, StringKey};
 use crate::i18n::Language;
+use crate::i18n::strings::{StringKey, lookup};
 use yew::prelude::*;
 
 /// Props for [`Footer`].
