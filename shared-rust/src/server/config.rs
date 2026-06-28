@@ -42,8 +42,11 @@ impl ServerConfig {
     /// - PIN: `{PREFIX}_PIN` → `PIN`
     /// - SITE_TITLE: `{PREFIX}_SITE_TITLE` → `{PREFIX}_TITLE` → `SITE_TITLE`
     pub fn from_env(app_prefix: &str) -> Self {
-        let _ = dotenvy::from_path("/app/data/.env");
-        let _ = dotenvy::dotenv();
+        #[cfg(not(test))]
+        {
+            let _ = dotenvy::from_path("/app/data/.env");
+            let _ = dotenvy::dotenv();
+        }
 
         let prefix = app_prefix.to_ascii_uppercase();
 
