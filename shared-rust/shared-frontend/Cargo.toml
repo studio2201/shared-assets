@@ -1,0 +1,12 @@
+[package]
+name = "shared-frontend"
+version = "3.0.0"
+edition = "2024"
+description = "Browser and frontend shared assets for UberMetroid companion apps."
+license = "Apache-2.0"
+
+[dependencies]
+shared-core = { path = "../shared-core" }
+yew = { version = "0.23", features = ["csr"] }
+web-sys = { version = "=0.3.98", features = ["Window", "Document", "HtmlSelectElement", "Event"] }
+serde = { version = "1.0", features = ["derive"] }

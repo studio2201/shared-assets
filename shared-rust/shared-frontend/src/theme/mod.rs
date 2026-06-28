@@ -73,7 +73,6 @@ impl Theme {
     }
 
     /// SVG icon HTML for the theme toggle button.
-    #[cfg(feature = "frontend")]
     pub fn icon_html(self) -> yew::Html {
         icons::icon(self)
     }
