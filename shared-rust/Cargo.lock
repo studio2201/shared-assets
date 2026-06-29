@@ -1035,8 +1035,10 @@ dependencies = [
 name = "shared-frontend"
 version = "3.0.0"
 dependencies = [
+ "js-sys",
  "serde",
  "shared-core",
+ "wasm-bindgen",
  "web-sys",
  "yew",
 ]
