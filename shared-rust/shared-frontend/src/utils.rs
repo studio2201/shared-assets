@@ -3,7 +3,7 @@
 pub fn copy_selection_to_clipboard() -> Option<String> {
     let window = web_sys::window()?;
     let selection = window.get_selection().ok()??;
-    let selected_text = selection.to_string();
+    let selected_text = String::from(selection.to_string());
     
     if selected_text.trim().is_empty() {
         return None;
