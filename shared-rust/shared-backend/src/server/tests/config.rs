@@ -30,7 +30,7 @@ fn defaults_when_no_env_set() {
             assert_eq!(cfg.allowed_origins, "*");
             assert!(cfg.pin.is_none());
             assert!(!cfg.enable_translation);
-            assert!(!cfg.enable_themes);
+            assert!(cfg.enable_themes);
             assert!(!cfg.enable_print);
             assert!(cfg.show_version);
             assert!(cfg.show_github);
