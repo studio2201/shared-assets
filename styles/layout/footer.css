@@ -66,6 +66,7 @@ footer.layout-footer {
     align-items: center;
     gap: 0.5rem;
     opacity: 0.8;
+    margin-right: 1.25rem;
     transition: opacity var(--transition), color var(--transition);
 }
 
@@ -127,4 +128,27 @@ footer.layout-footer {
         justify-self: unset;
         text-align: center;
     }
+}
+
+.footer-coffee-link {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.8;
+    margin-left: 1.25rem;
+    transition: opacity var(--transition), color var(--transition);
+}
+
+.footer-coffee-link:hover {
+    opacity: 1;
+    color: var(--primary);
+}
+
+.coffee-icon {
+    display: inline-block;
+    vertical-align: middle;
 }

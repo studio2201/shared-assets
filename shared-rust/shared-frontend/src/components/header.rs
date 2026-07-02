@@ -34,6 +34,13 @@ pub struct HeaderProps {
     #[prop_or(true)]
     pub enable_print: bool,
     pub print_disabled: bool,
+
+    #[prop_or_default]
+    pub site_url: Option<String>,
+    #[prop_or_default]
+    pub version: Option<String>,
+    #[prop_or_default]
+    pub version_url: Option<String>,
 }
 
 /// Top-of-page navigation bar shared by all companion apps.
@@ -83,10 +90,34 @@ pub fn header(props: &HeaderProps) -> Html {
     // user stored in localStorage; unknown values fall back to default.
     let theme = Theme::from_name(&props.theme).unwrap_or_default();
 
+    let title_html = match &props.site_url {
+        Some(url) => html! {
+            <a class="header-title-link" href={url.clone()} target="_blank" rel="noopener noreferrer">
+                <h1>{&props.site_title}</h1>
+            </a>
+        },
+        None => html! {
+            <h1>{&props.site_title}</h1>
+        },
+    };
+
+    let version_html = match (&props.version, &props.version_url) {
+        (Some(ver), Some(url)) => html! {
+            <a class="header-version-link" href={url.clone()} target="_blank" rel="noopener noreferrer">
+                <span class="header-version">{format!("v{}", ver)}</span>
+            </a>
+        },
+        (Some(ver), None) => html! {
+            <span class="header-version">{format!("v{}", ver)}</span>
+        },
+        _ => html! {},
+    };
+
     html! {
         <header>
             <div id="header-title">
-                <h1>{&props.site_title}</h1>
+                {title_html}
+                {version_html}
             </div>
 
             <div class="header-right">

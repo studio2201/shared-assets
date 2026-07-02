@@ -20,6 +20,9 @@ pub struct FooterProps {
     pub version_url: Option<String>,
 
     #[prop_or_default]
+    pub coffee_url: Option<String>,
+
+    #[prop_or_default]
     pub children: Html,
 }
 
@@ -36,14 +39,6 @@ pub fn footer(props: &FooterProps) -> Html {
     html! {
         <footer class="layout-footer">
             <div class="footer-left">
-                {version_block(props.show_version, &props.version, props.version_url.as_deref())}
-            </div>
-
-            <div class="footer-center">
-                {props.children.clone()}
-            </div>
-
-            <div class="footer-right">
                 {if props.show_github {
                     html! {
                         <a class="footer-github-link"
@@ -60,6 +55,38 @@ pub fn footer(props: &FooterProps) -> Html {
                                 <path d="M9 18c-4.51 2-5-2-7-2" />
                             </svg>
                             <span>{"GitHub"}</span>
+                        </a>
+                    }
+                } else {
+                    html! {}
+                }}
+                {version_block(props.show_version, &props.version, props.version_url.as_deref())}
+            </div>
+
+            <div class="footer-center">
+                {props.children.clone()}
+            </div>
+
+            <div class="footer-right">
+                {if let Some(ref url) = props.coffee_url {
+                    html! {
+                        <a class="footer-coffee-link"
+                           href={url.clone()}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           title="Buy Me a Coffee">
+                            <svg class="coffee-icon"
+                                 width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                                <line x1="6" y1="2" x2="6" y2="4" />
+                                <line x1="10" y1="2" x2="10" y2="4" />
+                                <line x1="14" y1="2" x2="14" y2="4" />
+                            </svg>
+                            <span>{"Coffee"}</span>
                         </a>
                     }
                 } else {
