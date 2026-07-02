@@ -35,6 +35,8 @@ pub enum StringKey {
     StatusPrintSuccess,
     StatusPrintFailure,
     StatusThemeChanged,
+    StatusConflictError,
+    StatusValidationError,
 }
 
 impl StringKey {
@@ -62,6 +64,8 @@ impl StringKey {
             Self::StatusPrintSuccess,
             Self::StatusPrintFailure,
             Self::StatusThemeChanged,
+            Self::StatusConflictError,
+            Self::StatusValidationError,
         ]
     }
 
@@ -89,6 +93,8 @@ impl StringKey {
             Self::StatusPrintSuccess => "Document sent to printer",
             Self::StatusPrintFailure => "Failed to send document to printer",
             Self::StatusThemeChanged => "Theme changed",
+            Self::StatusConflictError => "Conflict detected. Please reload to avoid overwriting newer changes.",
+            Self::StatusValidationError => "Validation failed: please check your input.",
         }
     }
 }
@@ -297,6 +303,26 @@ pub fn lookup(key: StringKey, lang: Language) -> &'static str {
             ("fr", "Thème modifié"),
             ("pt", "Tema alterado"),
             ("ru", "Тема изменена"),
+        ],
+        StringKey::StatusConflictError => &[
+            ("en", "Conflict detected. Please reload to avoid overwriting newer changes."),
+            ("zh", "检测到冲突。请刷新以避免覆盖较新的更改。"),
+            ("es", "Conflicto detectado. Por favor, recargue para evitar sobrescribir cambios más recientes."),
+            ("de", "Konflikt erkannt. Bitte neu laden, um das Überschreiben neuerer Änderungen zu verhindern."),
+            ("ja", "競合が検出されました。最新の変更を上書きしないよう、再読み込みしてください。"),
+            ("fr", "Conflit détecté. Veuillez recharger pour éviter d'écraser des modifications plus récentes."),
+            ("pt", "Conflito detetado. Por favor, recarregue para evitar sobrescrever as alterações mais recentes."),
+            ("ru", "Обнаружен конфликт. Пожалуйста, перезагрузите страницу, чтобы избежать перезаписи более новых изменений."),
+        ],
+        StringKey::StatusValidationError => &[
+            ("en", "Validation failed: please check your input."),
+            ("zh", "验证失败：请检查您的输入。"),
+            ("es", "Error de validación: por favor, verifique su entrada."),
+            ("de", "Validierung fehlerhaft: Bitte überprüfen Sie Ihre Eingabe."),
+            ("ja", "検証に失敗しました：入力を確認してください。"),
+            ("fr", "Échec de la validation : veuillez vérifier votre saisie."),
+            ("pt", "Falha na validação: por favor, verifique a sua entrada."),
+            ("ru", "Ошибка валидации: пожалуйста, проверьте введенные данные."),
         ],
     };
 
