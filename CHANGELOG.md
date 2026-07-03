@@ -5,6 +5,46 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.18] - 2026-07-02
+
+### Added
+
+- **`shared_frontend::storage::StorageService`** — localStorage helper
+  with `super_metroid_theme` cookie mirror for the `theme` key.
+  Replaces per-app `frontend/src/storage.rs` (was duplicated across
+  beam, pad, todo, trace, grid, pulse, snake).
+- **`shared_frontend::locale`** — browser locale detection and persistence
+  (`detect_browser_locale`, `get_saved_locale`, `set_saved_locale`).
+  Pure Rust, no Yew deps, so Leptos apps (aura) can call it too.
+- **`shared_frontend::components::LanguageSwitcher`** — Yew `<select>`
+  component that renders the 8-language dropdown and persists the
+  choice via `set_saved_locale`. Replaces the per-app language
+  switcher JSX.
+- **`shared_frontend::i18n::common_strings`** — base set of common UI
+  strings (Cancel, Save, Delete, Confirm, Loading, Error, Failed,
+  Success, Close, Yes, No, Back, Settings, Logout, Print, Theme,
+  Language) in all 8 languages. Apps can use these directly via
+  `common_strings::lookup(CommonString::Cancel, language)`.
+- **`shared_backend::tracing_init::init_tracing`** — EnvFilter +
+  optional file logging initialization. Replaces per-app inline
+  tracing setup (was duplicated across beam, pad, todo, trace, grid,
+  pulse, Rustle). Adopts snake's polished factored design.
+
+### Changed
+
+- All three crate versions bumped `3.0.13` → `3.0.18`.
+- `shared_frontend::web-sys` features extended with `HtmlDocument` (for
+  cookie getter/setter on `Document`).
+- `shared_backend` gains `tracing-subscriber = { version = "0.3",
+  features = ["env-filter"] }` as a direct dependency.
+
+### Migration
+
+Consumers (beam, pad, todo, trace, grid, pulse, snake, Rustle, aura)
+should bump their shared-assets pin from `tag = "v3.0.17"` to
+`tag = "v3.0.18"` and delete their per-app duplicates of the modules
+above. See each app's PR for the exact diff.
+
 ## [3.0.1] - 2026-06-28
 
 ### Added

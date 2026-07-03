@@ -1,10 +1,22 @@
 pub mod components;
+pub mod locale;
+pub mod storage;
 pub mod theme;
 pub mod utils;
+pub use locale::{detect_browser_locale, get_saved_locale, set_saved_locale};
+pub use storage::StorageService;
 pub use utils::EventListener;
 
-// Re-export i18n from shared-core so frontend components can use it via crate::i18n
-pub use shared_core::i18n;
+pub mod i18n;
 
 // Re-exports for ergonomics
-pub use components::{footer, footer::Footer, header, header::Header, notifier, notifier::{ToastNotification, ToastContainer, ToastType}};
+pub use components::{
+    footer,
+    footer::Footer,
+    header,
+    header::Header,
+    language_switcher,
+    language_switcher::{LanguageSwitcher, LanguageSwitcherProps},
+    notifier,
+    notifier::{ToastContainer, ToastNotification, ToastType},
+};

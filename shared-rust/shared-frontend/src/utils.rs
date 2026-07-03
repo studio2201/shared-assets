@@ -1,5 +1,5 @@
-use yew::Callback;
 use wasm_bindgen::JsCast;
+use yew::Callback;
 
 /// Auto-copies highlighted text from the current selection.
 /// Returns Some(copied_text) if text was successfully copied, otherwise None.
@@ -53,7 +53,8 @@ impl EventListener {
         F: FnMut(web_sys::Event) + 'static,
     {
         use wasm_bindgen::prelude::Closure;
-        let closure = Closure::wrap(Box::new(move |e| callback(e)) as Box<dyn FnMut(web_sys::Event)>);
+        let closure =
+            Closure::wrap(Box::new(move |e| callback(e)) as Box<dyn FnMut(web_sys::Event)>);
         target
             .add_event_listener_with_callback(event_type, closure.as_ref().unchecked_ref())
             .unwrap();

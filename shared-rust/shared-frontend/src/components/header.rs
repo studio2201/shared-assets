@@ -110,33 +110,38 @@ pub fn header(props: &HeaderProps) -> Html {
             use wasm_bindgen::JsCast;
             let window = web_sys::window().unwrap();
             let toggle_theme = toggle_theme.clone();
-            let listener = crate::utils::EventListener::new(&window, "keydown", move |e: web_sys::Event| {
-                let key_event = e.dyn_ref::<web_sys::KeyboardEvent>().unwrap();
-                let key = key_event.key();
+            let listener =
+                crate::utils::EventListener::new(&window, "keydown", move |e: web_sys::Event| {
+                    let key_event = e.dyn_ref::<web_sys::KeyboardEvent>().unwrap();
+                    let key = key_event.key();
 
-                // Skip if focus is on form input/textarea/select elements to not disrupt typing
-                if let Some(target) = e.target() {
-                    if let Ok(elem) = target.dyn_into::<web_sys::Element>() {
-                        let tag_name = elem.tag_name().to_lowercase();
-                        if tag_name == "input" || tag_name == "textarea" || tag_name == "select" {
-                            return;
+                    // Skip if focus is on form input/textarea/select elements to not disrupt typing
+                    if let Some(target) = e.target() {
+                        if let Ok(elem) = target.dyn_into::<web_sys::Element>() {
+                            let tag_name = elem.tag_name().to_lowercase();
+                            if tag_name == "input" || tag_name == "textarea" || tag_name == "select"
+                            {
+                                return;
+                            }
                         }
                     }
-                }
 
-                if key == "t" || key == "T" {
-                    // Create a mock MouseEvent to invoke the callback
-                    if let Ok(dummy_event) = web_sys::MouseEvent::new("click") {
-                        toggle_theme.emit(dummy_event);
+                    if key == "t" || key == "T" {
+                        // Create a mock MouseEvent to invoke the callback
+                        if let Ok(dummy_event) = web_sys::MouseEvent::new("click") {
+                            toggle_theme.emit(dummy_event);
+                        }
                     }
-                }
-            });
+                });
             Box::new(move || drop(listener)) as Box<dyn FnOnce()>
         });
     }
 
     let site_url = props.site_url.clone().unwrap_or_else(|| {
-        format!("https://github.com/UberMetroid/{}", props.site_title.to_lowercase())
+        format!(
+            "https://github.com/UberMetroid/{}",
+            props.site_title.to_lowercase()
+        )
     });
 
     let title_html = html! {
@@ -148,7 +153,11 @@ pub fn header(props: &HeaderProps) -> Html {
     let version_html = match &props.version {
         Some(ver) => {
             let version_url = props.version_url.clone().unwrap_or_else(|| {
-                format!("https://github.com/UberMetroid/{}/releases/tag/v{}", props.site_title.to_lowercase(), ver)
+                format!(
+                    "https://github.com/UberMetroid/{}/releases/tag/v{}",
+                    props.site_title.to_lowercase(),
+                    ver
+                )
             });
             html! {
                 <a class="header-version-link" href={version_url} target="_blank" rel="noopener noreferrer">
