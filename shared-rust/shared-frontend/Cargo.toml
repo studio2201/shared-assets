@@ -1,6 +1,6 @@
 [package]
 name = "shared-frontend"
-version = "3.0.18"
+version = "3.0.19"
 edition = "2024"
 description = "Browser and frontend shared assets for UberMetroid companion apps."
 license = "Apache-2.0"

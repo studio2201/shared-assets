@@ -61,7 +61,10 @@ impl ServerConfig {
 
         let base_url = env::var("BASE_URL").unwrap_or_else(|_| format!("http://localhost:{port}"));
 
-        let allowed_origins = env::var("ALLOWED_ORIGINS").unwrap_or_else(|_| "*".to_string());
+        // Prefer an explicit allowlist. Operators who need open CORS set
+        // ALLOWED_ORIGINS=* deliberately (compose files often do for LAN).
+        // Default empty is fail-closed in [`crate::middleware::cors_layer`].
+        let allowed_origins = env::var("ALLOWED_ORIGINS").unwrap_or_default();
 
         let pin = first_nonempty_env(&[&format!("{prefix}_PIN"), "PIN"]).and_then(|p| {
             let len = p.chars().count();

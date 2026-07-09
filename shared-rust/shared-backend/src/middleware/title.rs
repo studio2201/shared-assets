@@ -59,8 +59,27 @@ pub async fn title_injection_layer(
         }
     };
 
-    let injected = body_str.replace("{{SITE_TITLE}}", &state.0.site_title);
+    // Escape so a compromised/hostile SITE_TITLE cannot inject HTML/JS into
+    // every page that uses {{SITE_TITLE}} (shared across companion apps).
+    let safe_title = html_escape(&state.0.site_title);
+    let injected = body_str.replace("{{SITE_TITLE}}", &safe_title);
     Response::from_parts(parts, Body::from(injected))
+}
+
+/// Minimal HTML entity escape for text content / attribute-safe titles.
+fn html_escape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            '\'' => out.push_str("&#39;"),
+            _ => out.push(c),
+        }
+    }
+    out
 }
 
 #[cfg(test)]
@@ -76,5 +95,14 @@ mod tests {
                 axum::middleware::Next,
             ) -> _ = title_injection_layer;
         }
+    }
+
+    #[test]
+    fn html_escape_blocks_script_payload() {
+        let raw = r#"Todo</title><script>alert(1)</script>"#;
+        let esc = html_escape(raw);
+        assert!(!esc.contains('<'));
+        assert!(!esc.contains('>'));
+        assert!(esc.contains("&lt;script&gt;"));
     }
 }

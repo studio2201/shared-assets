@@ -27,7 +27,8 @@ fn defaults_when_no_env_set() {
             assert_eq!(cfg.port, 4401);
             assert_eq!(cfg.site_title, "BEAM");
             assert_eq!(cfg.base_url, "http://localhost:4401");
-            assert_eq!(cfg.allowed_origins, "*");
+            // Empty default is fail-closed for CORS (set ALLOWED_ORIGINS=* deliberately).
+            assert_eq!(cfg.allowed_origins, "");
             assert!(cfg.pin.is_none());
             assert!(!cfg.enable_translation);
             assert!(cfg.enable_themes);

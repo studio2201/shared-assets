@@ -10,9 +10,17 @@ use axum::http::header::{COOKIE, HeaderValue, SET_COOKIE};
 ///
 /// Cookie name: `pin`. Value: a random token (caller-provided).
 /// Lifetime: [`ServerConfig::cookie_max_age_hours`].
+///
+/// When `base_url` is `https://…`, the `Secure` flag is added so the session
+/// cookie is never sent over cleartext HTTP.
 pub fn build_set_cookie_header(config: &ServerConfig, value: &str) -> String {
     let max_age = config.cookie_max_age_hours * 3600;
-    format!("pin={value}; Path=/; HttpOnly; SameSite=Strict; Max-Age={max_age}")
+    let secure = if config.base_url.starts_with("https://") {
+        "; Secure"
+    } else {
+        ""
+    };
+    format!("pin={value}; Path=/; HttpOnly; SameSite=Strict; Max-Age={max_age}{secure}")
 }
 
 /// Attach the session cookie to an outgoing response.
@@ -73,6 +81,7 @@ mod tests {
         assert!(h.contains("Max-Age=86400")); // 24h
         assert!(h.contains("HttpOnly"));
         assert!(h.contains("SameSite=Strict"));
+        assert!(!h.contains("Secure")); // http base_url
     }
 
     #[test]
@@ -80,5 +89,13 @@ mod tests {
         let mut c = cfg();
         c.cookie_max_age_hours = 1;
         assert!(build_set_cookie_header(&c, "x").contains("Max-Age=3600"));
+    }
+
+    #[test]
+    fn cookie_secure_when_base_url_is_https() {
+        let mut c = cfg();
+        c.base_url = "https://pad.example.com".into();
+        let h = build_set_cookie_header(&c, "tok");
+        assert!(h.contains("Secure"));
     }
 }

@@ -26,8 +26,16 @@ pub fn cors_layer(config: &ServerConfig) -> CorsLayer {
     ];
 
     let trimmed = config.allowed_origins.trim();
-    if trimmed == "*" || trimmed.is_empty() {
+    // Explicit `*` remains an operator opt-in for open CORS.
+    // Empty / unset no longer means "permissive" — that was a footgun that
+    // left PIN endpoints cross-origin open by accident.
+    if trimmed == "*" {
         return CorsLayer::permissive();
+    }
+    if trimmed.is_empty() {
+        return CorsLayer::new()
+            .allow_methods(methods)
+            .allow_headers(headers);
     }
 
     let mut layer = CorsLayer::new()
@@ -81,8 +89,8 @@ mod tests {
     }
 
     #[test]
-    fn empty_origins_falls_back_to_wildcard() {
-        // Empty string should not panic; falls back to permissive.
+    fn empty_origins_is_restrictive_not_permissive() {
+        // Empty string must not panic and must not open all origins.
         let _ = cors_layer(&cfg_with(""));
     }
 }
