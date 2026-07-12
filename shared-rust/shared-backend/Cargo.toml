@@ -1,8 +1,8 @@
 [package]
 name = "shared-backend"
-version = "3.0.29"
+version = "3.0.30"
 edition = "2024"
-description = "Server-side and backend shared assets for etecoons companion apps."
+description = "Server-side and backend shared assets for UberMetroid companion apps."
 license = "Apache-2.0"
 repository = "https://github.com/UberMetroid/shared-assets"
 homepage = "https://github.com/UberMetroid/shared-assets"

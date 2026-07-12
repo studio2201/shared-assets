@@ -1,8 +1,8 @@
 [package]
 name = "shared-core"
-version = "3.0.29"
+version = "3.0.30"
 edition = "2024"
-description = "Core platform-agnostic types and primitives for etecoons shared assets."
+description = "Core platform-agnostic types and primitives for UberMetroid shared assets."
 license = "Apache-2.0"
 repository = "https://github.com/UberMetroid/shared-assets"
 homepage = "https://github.com/UberMetroid/shared-assets"

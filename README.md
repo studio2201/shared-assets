@@ -1,19 +1,19 @@
 <p align="center">
-  <a href="https://github.com/etecoons">
-    <img src="assets/header.jpg" alt="etecoons banner" width="100%">
+  <a href="https://github.com/UberMetroid">
+    <img src="assets/header.jpg" alt="UberMetroid banner" width="100%">
   </a>
 </p>
 
-# etecoons Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
+# UberMetroid Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
 
 **v3.0.18 — Shared styles, Rust components, and backend helpers for the
-etecoons companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
+UberMetroid companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
 
 ---
 
 ## Overview
 
-This repository collects everything that is reused across every etecoons
+This repository collects everything that is reused across every UberMetroid
 companion app: the shared CSS themes and layouts, the browser-side Yew UI
 chrome, and the server-side axum middleware, configuration parsing, and PIN
 authentication. Starting with v3.0.0 the Rust side is split into a 3-crate
@@ -196,9 +196,9 @@ returning a `VerifyPinResponse`).
 For the git-dep form (recommended for tagged releases):
 
 ```toml
-shared-core = { git = "https://github.com/etecoons/shared-assets", tag = "v3.0.18" }
-shared-backend = { git = "https://github.com/etecoons/shared-assets", tag = "v3.0.18" }
-shared-frontend = { git = "https://github.com/etecoons/shared-assets", tag = "v3.0.18" }
+shared-core = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
+shared-backend = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
+shared-frontend = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
 ```
 
 ---
@@ -337,4 +337,4 @@ The workspace is pinned via `rust-toolchain.toml` (Rust 1.96.0).
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026
-etecoons.
+UberMetroid.

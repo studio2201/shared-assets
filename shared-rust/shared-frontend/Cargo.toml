@@ -1,8 +1,8 @@
 [package]
 name = "shared-frontend"
-version = "3.0.29"
+version = "3.0.30"
 edition = "2024"
-description = "Browser and frontend shared assets for etecoons companion apps."
+description = "Browser and frontend shared assets for UberMetroid companion apps."
 license = "Apache-2.0"
 repository = "https://github.com/UberMetroid/shared-assets"
 homepage = "https://github.com/UberMetroid/shared-assets"
