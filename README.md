@@ -1,19 +1,19 @@
 <p align="center">
-  <a href="https://github.com/UberMetroid">
-    <img src="assets/header.jpg" alt="UberMetroid banner" width="100%">
+  <a href="https://github.com/studio2201">
+    <img src="assets/header.jpg" alt="studio2201 banner" width="100%">
   </a>
 </p>
 
-# UberMetroid Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
+# studio2201 Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
 
-**v3.0.18 — Shared styles, Rust components, and backend helpers for the
-UberMetroid companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
+**v3.0.31 — Shared styles, Rust components, and backend helpers for the
+studio2201 companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
 
 ---
 
 ## Overview
 
-This repository collects everything that is reused across every UberMetroid
+This repository collects everything that is reused across every studio2201
 companion app: the shared CSS themes and layouts, the browser-side Yew UI
 chrome, and the server-side axum middleware, configuration parsing, and PIN
 authentication. Starting with v3.0.0 the Rust side is split into a 3-crate
@@ -21,7 +21,7 @@ Cargo workspace (`shared-core`, `shared-backend`, `shared-frontend`) so each
 consumer can depend on exactly the slice it needs without pulling in the
 other half of the stack.
 
-v3.0.18 adds a `shared-core::types` module with the on-the-wire data types
+v3.0.31 adds a `shared-core::types` module with the on-the-wire data types
 that both the Yew frontend and the axum backend need to agree on (todo
 items, site config, PIN auth request/response shapes, etc.).
 
@@ -31,7 +31,7 @@ items, site config, PIN auth request/response shapes, etc.).
 
 ```
  ┌──────────────────────────────────────┐
- │ shared-assets v3.0.18 │
+ │ shared-assets v3.0.31 │
  │ (this repository) │
  └──────────────────────────────────────┘
  ▲
@@ -196,9 +196,9 @@ returning a `VerifyPinResponse`).
 For the git-dep form (recommended for tagged releases):
 
 ```toml
-shared-core = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
-shared-backend = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
-shared-frontend = { git = "https://github.com/UberMetroid/shared-assets", tag = "v3.0.18" }
+shared-core = { git = "https://github.com/studio2201/shared-assets", tag = "v3.0.31" }
+shared-backend = { git = "https://github.com/studio2201/shared-assets", tag = "v3.0.31" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets", tag = "v3.0.31" }
 ```
 
 ---
@@ -337,4 +337,4 @@ The workspace is pinned via `rust-toolchain.toml` (Rust 1.96.0).
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026
-UberMetroid.
+studio2201.

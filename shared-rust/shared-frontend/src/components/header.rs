@@ -139,7 +139,7 @@ pub fn header(props: &HeaderProps) -> Html {
 
     let site_url = props.site_url.clone().unwrap_or_else(|| {
         format!(
-            "https://github.com/UberMetroid/{}",
+            "https://github.com/studio2201/{}",
             props.site_title.to_lowercase()
         )
     });

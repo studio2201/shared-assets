@@ -1,4 +1,4 @@
-//! Backend server primitives shared by every UberMetroid companion app.
+//! Backend server primitives shared by every studio2201 companion app.
 //!
 //! Provides:
 //!

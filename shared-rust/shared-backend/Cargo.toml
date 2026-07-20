@@ -1,12 +1,12 @@
 [package]
 name = "shared-backend"
-version = "3.0.30"
+version = "3.0.31"
 edition = "2024"
-description = "Server-side and backend shared assets for UberMetroid companion apps."
+description = "Server-side and backend shared assets for studio2201 companion apps."
 license = "Apache-2.0"
-repository = "https://github.com/UberMetroid/shared-assets"
-homepage = "https://github.com/UberMetroid/shared-assets"
-documentation = "https://github.com/UberMetroid/shared-assets"
+repository = "https://github.com/studio2201/shared-assets"
+homepage = "https://github.com/studio2201/shared-assets"
+documentation = "https://github.com/studio2201/shared-assets"
 readme = "../../README.md"
 keywords = ["axum", "server", "middleware", "authentication", "cors"]
 categories = ["web-programming::http-server", "authentication", "api-bindings"]

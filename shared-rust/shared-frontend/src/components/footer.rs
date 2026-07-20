@@ -34,7 +34,7 @@ pub fn footer(props: &FooterProps) -> Html {
     let github_link = props
         .github_url
         .clone()
-        .unwrap_or_else(|| "https://github.com/UberMetroid".to_string());
+        .unwrap_or_else(|| "https://github.com/studio2201".to_string());
 
     let coffee_link = props
         .coffee_url

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod strings;
 
-/// Languages supported by the UberMetroid companion apps.
+/// Languages supported by the studio2201 companion apps.
 ///
 /// The order in [`Language::all`] is the order shown in the language picker.
 /// Adding a language means: add a variant here, add entries to [`Language::label`],
