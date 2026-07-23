@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "3.0.35"
+version = "3.0.36"
 edition = "2024"
 license = "Apache-2.0"
 repository = "https://github.com/studio2201/shared-assets"

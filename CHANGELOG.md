@@ -5,6 +5,26 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.36] - 2026-07-23
+
+### Added
+
+- **`shared_backend::app_error::AppError`** — generic `axum::IntoResponse`
+  error envelope covering I/O, JSON, and catch-all internal cases.
+  Replaces the byte-identical `error.rs` files in defend/scan/snake
+  (97 LoC each). Apps wrap this with their own `#[error("...")]` variants.
+- **`shared_backend::cookie_auth::cookie_should_be_secure`** — pure
+  helper that decides whether to set the `Secure` flag on a cookie
+  based on `X-Forwarded-Proto` and `base_url`. Three unit tests cover
+  the XFP header, base-url fallback, and uppercase header handling.
+- **`shared_backend::auth::origin_check::{origin_matches, forbidden_response, allow_null_origin_from_env, strip_scheme}`**
+  — pure CSRF origin-check helpers. Apps wire them into an axum
+  middleware function that supplies their own state. Five unit tests
+  cover exact match, localhost-any-port, cross-origin, non-localhost
+  port, and 403 status code.
+- **`serde_json`** added as a direct dependency of `shared-backend`
+  (was previously a transitive-only dep).
+
 ## [3.0.35] - 2026-07-23
 
 ### Added

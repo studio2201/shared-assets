@@ -1,3 +1,4 @@
+pub mod app_error;
 pub mod auth;
 pub mod cookie_auth;
 pub mod database;

@@ -46,6 +46,21 @@ pub fn build_clear_cookie<'a>(cookie_name: &'a str, secure: bool) -> Cookie<'a> 
         .build()
 }
 
+/// Decide whether an auth cookie should be marked `Secure`. Trust, in
+/// order:
+///
+/// 1. The `X-Forwarded-Proto: https` header (when the request is from a
+///    trusted proxy, enforced by the caller).
+/// 2. The configured `base_url` scheme as a fallback.
+#[must_use]
+pub fn cookie_should_be_secure(headers: &axum::http::HeaderMap, base_url: &str) -> bool {
+    headers
+        .get("x-forwarded-proto")
+        .and_then(|v| v.to_str().ok())
+        .is_some_and(|v| v.eq_ignore_ascii_case("https"))
+        || base_url.starts_with("https")
+}
+
 fn clamp_seconds(seconds: i64) -> u64 {
     if seconds <= 0 {
         tracing::warn!(
@@ -118,5 +133,26 @@ mod tests {
             c.max_age(),
             Some(Duration::seconds(MAX_LIFETIME_SECONDS as i64))
         );
+    }
+
+    #[test]
+    fn cookie_secure_via_xfp() {
+        let mut h = axum::http::HeaderMap::new();
+        h.insert("x-forwarded-proto", "https".parse().unwrap());
+        assert!(cookie_should_be_secure(&h, "http://example.com"));
+    }
+
+    #[test]
+    fn cookie_secure_via_base_url() {
+        let h = axum::http::HeaderMap::new();
+        assert!(cookie_should_be_secure(&h, "https://app.example"));
+        assert!(!cookie_should_be_secure(&h, "http://app.example"));
+    }
+
+    #[test]
+    fn cookie_secure_handles_uppercase_https_header() {
+        let mut h = axum::http::HeaderMap::new();
+        h.insert("x-forwarded-proto", "HTTPS".parse().unwrap());
+        assert!(cookie_should_be_secure(&h, "http://app.example"));
     }
 }

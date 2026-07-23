@@ -4,10 +4,12 @@
 //!
 //! - [`attempts`] — failed-attempt tracking with per-IP lockout
 //! - [`middleware`] — axum middleware factory that gates routes behind a PIN
+//! - [`origin_check`] — CSRF origin-check helpers
 //! - [`session`] — cookie issuance helpers
 
 pub mod attempts;
 pub mod middleware;
+pub mod origin_check;
 pub mod session;
 
 pub use attempts::{
