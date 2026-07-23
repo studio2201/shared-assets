@@ -5,6 +5,37 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.35] - 2026-07-23
+
+### Added
+
+- **`shared_backend::rate_limit::RateLimiter`** — per-IP sliding-window
+  in-memory request-budget limiter with two constructors
+  (`new()` default 100 req / 60s; `with_limits()` for tests) and
+  `check`, `cleanup`, `tracked_ips` methods. Five unit tests cover
+  under/over-budget, per-IP isolation, window expiry, idle cleanup.
+  Promoted from defend/scan/snake's identical `services/rate_limit.rs`.
+- **`shared_backend::session_id::generate_session_id`** — 32-character
+  lowercase hex session id drawn from `OsRng` (CSPRNG) with a
+  thread-local RNG fallback (logged on use). Two unit tests cover
+  format and uniqueness across 256 generations.
+- **`shared_backend::cookie_auth::{build_cookie, build_clear_cookie}`** —
+  single source of truth for `HttpOnly` + `SameSite=Strict` + path auth
+  cookies, with the `cookie_max_age_hours` clamping range `[1 minute, 30 days]`.
+  Accepts the cookie name as an argument so each app keeps its own
+  brand prefix. Five unit tests cover cookie semantics and clamps.
+- **`shared_frontend::components::{Login, LoginProps}`** — generic
+  numeric-PIN input form with auto-submit and focus management.
+  Decoupled from any HTTP client: the parent receives `on_verify(String)`
+  and decides how to call the verify-pin API. Replaces the seven
+  per-app `components/pin.rs` files (207 LoC avg).
+
+### Added (workspace deps)
+
+- `rand = { version = "0.9", features = ["std", "thread_rng"] }`
+- `time = { version = "0.3", features = ["std"] }`
+- `axum-extra = { version = "0.10", features = ["cookie"] }`
+
 ## [3.0.34] - 2026-07-23
 
 ### Changed

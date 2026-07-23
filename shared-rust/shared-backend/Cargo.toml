@@ -21,6 +21,7 @@ rate_limit = []
 [dependencies]
 shared-core = { path = "../shared-core" }
 axum = { workspace = true }
+axum-extra = { workspace = true }
 ipnet = { workspace = true }
 thiserror = { workspace = true }
 anyhow = { workspace = true }
@@ -34,6 +35,8 @@ serde = { workspace = true }
 constant_time_eq = { workspace = true }
 rusqlite = { workspace = true }
 chrono = { workspace = true }
+time = { workspace = true }
+rand = { workspace = true }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread", "time"] }

@@ -7,7 +7,7 @@ members = [
 ]
 
 [workspace.package]
-version = "3.0.34"
+version = "3.0.35"
 edition = "2024"
 license = "Apache-2.0"
 repository = "https://github.com/studio2201/shared-assets"
@@ -34,6 +34,9 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 rusqlite = { version = "0.31", features = ["bundled"] }
 chrono = { version = "0.4", features = ["clock", "std"] }
+time = { version = "0.3", features = ["std"] }
+rand = { version = "0.9", features = ["std", "thread_rng"] }
+axum-extra = { version = "0.10", features = ["cookie"] }
 
 # Frontend (browser-side)
 yew = { version = "0.23", features = ["csr"] }
