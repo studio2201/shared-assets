@@ -5,6 +5,20 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.6] - 2026-07-28
+
+### Added
+
+- **`scripts/ensure-app-icons.sh`** — in-place fix for companion apps:
+  copies `icon.png` → `favicon.png`, removes the legacy red-check
+  `favicon.svg`, and rewrites `frontend/index.html` so the primary
+  `rel="icon"` is the service PNG (not SVG-first).
+
+### Docs
+
+- Tab-icon contract expanded with the exact Trunk HTML snippet and
+  why SVG-first shows the old todo checkmark in the browser tab.
+
 ## [3.3.5] - 2026-07-28
 
 ### Fixed / docs

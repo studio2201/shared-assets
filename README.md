@@ -55,16 +55,31 @@ Do **not** vendor `shared-rust/` into apps (stale copies, unused by Cargo).
 Each companion app owns its brand icon under **`assets/icon.png`** and must
 ship the **same file** as **`assets/favicon.png`** for the browser tab.
 
-- Primary `<link rel="icon">` must be the **PNG**, not a shared/stale SVG.
-- Do **not** use the legacy red-check `favicon.svg` from old scaffolds.
-- Validate with:
+Browsers prefer the **first** `<link rel="icon">`. If a legacy red-check
+`favicon.svg` is listed first, the tab shows the todo scaffold mark instead of
+the service icon (even when GitHub/README use the correct PNG).
+
+**Required in every Yew app `frontend/index.html`:**
+
+```html
+<link data-trunk rel="copy-file" href="../assets/favicon.png" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+```
+
+- Do **not** list `favicon.svg` as primary (or at all, if it is the old red-check).
+- Keep `assets/favicon.png` byte-identical to `assets/icon.png`.
+- Backend should serve `/favicon.png` as `image/png` (prefer PNG over SVG on any legacy `/favicon.svg` route).
+
+**Fix + validate:**
 
 ```bash
-./scripts/check-app-icons.sh
+./scripts/ensure-app-icons.sh            # sync PNG, drop red-check SVG, patch index.html
+./scripts/ensure-app-icons.sh ../mark
+./scripts/check-app-icons.sh             # CI-friendly assert
 ./scripts/check-app-icons.sh ../mark
 ```
 
-  
 Rust crates come from the git tag; session/cookie helpers stay **app-local**.
 
 ### Yew usage
