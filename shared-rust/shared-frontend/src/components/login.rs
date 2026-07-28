@@ -37,6 +37,7 @@ pub struct LoginProps {
     #[prop_or(true)]
     pub autofocus: bool,
     /// Optional language for default text labels when props aren't set.
+    #[prop_or_default]
     pub language: Option<Language>,
     /// Optional element id for the form, useful for tests.
     #[prop_or_default]
