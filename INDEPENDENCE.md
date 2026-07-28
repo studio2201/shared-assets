@@ -39,6 +39,9 @@ Independence = separate install/run/upgrade. **Not** “skip the brand kit.”
 | Session ID generation | Blast radius: a shared RNG bug must not hit every product at once |
 | Cookie builders + cookie **names** | Product-specific names (`BEAM_PIN`, …) and SameSite policy |
 | `verify_pin` / `logout` / `require_pin` handlers | Product state shape and response DTOs |
+
+PIN secrets themselves must be **ASCII digits only (4–64)**. Shared `ServerConfig`
+ignores non-numeric env values so Login (digit filter) can always type the PIN.
 | Domain models & routes | The product itself |
 | App CSS, app i18n | Product UX |
 | Deploy (Dockerfile, compose, Unraid XML) | Independent install |

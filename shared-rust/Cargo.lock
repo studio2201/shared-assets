@@ -1279,7 +1279,7 @@ dependencies = [
 
 [[package]]
 name = "shared-backend"
-version = "3.3.0"
+version = "3.3.2"
 dependencies = [
  "anyhow",
  "axum",
@@ -1306,7 +1306,7 @@ dependencies = [
 
 [[package]]
 name = "shared-core"
-version = "3.3.0"
+version = "3.3.2"
 dependencies = [
  "constant_time_eq",
  "serde",
@@ -1315,7 +1315,7 @@ dependencies = [
 
 [[package]]
 name = "shared-frontend"
-version = "3.3.0"
+version = "3.3.2"
 dependencies = [
  "js-sys",
  "serde",

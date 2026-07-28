@@ -5,6 +5,18 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.2] - 2026-07-28
+
+### Fixed / enforced
+
+- **Numeric PIN only** — `ServerConfig::from_env` rejects non-digit PIN env
+  values (e.g. `MARK_PIN=test`). Matches the Login UI digit filter so a
+  configured PIN is always enterable.
+- **`parse_numeric_pin` / `is_valid_numeric_pin`** — public helpers + tests
+  (length 4–64, ASCII digits only).
+- **`filter_numeric_pin`** on Login + tests that letters/spaces are stripped.
+- Login input: `inputmode="numeric"` / `pattern="[0-9]*"`.
+
 ## [3.3.1] - 2026-07-28
 
 ### Fixed

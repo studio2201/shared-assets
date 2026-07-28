@@ -1,7 +1,9 @@
-//! Reusable numeric-PIN login component.
+//! Reusable **numeric-only** PIN login component.
 //!
 //! Renders a single numeric input that auto-submits once it reaches the
 //! configured length, or that the user can submit explicitly via Enter.
+//! Non-digit characters are stripped (see [`filter_numeric_pin`]) so the
+//! value always matches what [`shared_backend::server::ServerConfig`] accepts.
 //! The parent handles the API call (emit `on_verify` with the PIN); the
 //! component renders the prompt / locked label and requests focus.
 //!
@@ -10,6 +12,16 @@
 
 use shared_core::i18n::Language;
 use yew::prelude::*;
+
+/// Keep only ASCII digits from a raw input string (PIN UI filter).
+///
+/// This is the single source of truth for what the login field accepts.
+/// Must stay aligned with backend `parse_numeric_pin` (digits only;
+/// length 4–64 is enforced when reading `{APP}_PIN` / `PIN` from env).
+#[must_use]
+pub fn filter_numeric_pin(raw: &str) -> String {
+    raw.chars().filter(|c| c.is_ascii_digit()).collect()
+}
 
 /// Props for [`Login`].
 #[derive(Properties, PartialEq)]
@@ -89,8 +101,7 @@ pub fn login(props: &LoginProps) -> Html {
         let pin_len = props.pin_length;
         Callback::from(move |e: InputEvent| {
             let input: web_sys::HtmlInputElement = e.target_unchecked_into();
-            let val = input.value();
-            let filtered: String = val.chars().filter(|c| c.is_ascii_digit()).collect();
+            let filtered = filter_numeric_pin(&input.value());
             input.set_value(&filtered);
 
             if filtered.len() <= pin_len {
@@ -134,6 +145,9 @@ pub fn login(props: &LoginProps) -> Html {
                         <input
                             ref={input_ref.clone()}
                             type="password"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            autocomplete="one-time-code"
                             class="pin-input-field"
                             value={(*pin_input).clone()}
                             oninput={on_input}
@@ -176,5 +190,23 @@ mod tests {
         };
         assert_eq!(p.pin_length, 4);
         assert!(p.autofocus);
+    }
+
+    #[test]
+    fn filter_numeric_pin_strips_letters() {
+        // Regression: env PIN=test is unusable if UI only accepts digits.
+        assert_eq!(filter_numeric_pin("test"), "");
+        assert_eq!(filter_numeric_pin("12ab34"), "1234");
+        assert_eq!(filter_numeric_pin("1234"), "1234");
+        assert_eq!(filter_numeric_pin("12 34"), "1234");
+        assert_eq!(filter_numeric_pin("12-34"), "1234");
+        assert_eq!(filter_numeric_pin(""), "");
+    }
+
+    #[test]
+    fn filter_numeric_pin_keeps_only_ascii_digits() {
+        // Full-width / unicode digits must not slip through.
+        assert_eq!(filter_numeric_pin("１２３４"), "");
+        assert_eq!(filter_numeric_pin("4\u{0660}2"), "42"); // Arabic-Indic ٠ stripped
     }
 }

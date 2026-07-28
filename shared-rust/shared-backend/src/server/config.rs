@@ -66,12 +66,21 @@ impl ServerConfig {
         // Default empty is fail-closed in [`crate::middleware::cors_layer`].
         let allowed_origins = env::var("ALLOWED_ORIGINS").unwrap_or_default();
 
+        // PIN must be numeric-only (matches Login UI digit filter). Non-digit
+        // values like "test" are rejected so operators cannot configure a PIN
+        // the browser UI cannot enter.
         let pin = first_nonempty_env(&[&format!("{prefix}_PIN"), "PIN"]).and_then(|p| {
-            let len = p.chars().count();
-            if (4..=64).contains(&len) {
-                Some(p)
-            } else {
-                None
+            match parse_numeric_pin(&p) {
+                Ok(pin) => Some(pin),
+                Err(reason) => {
+                    tracing::warn!(
+                        target: "config",
+                        pin_preview = %mask_pin_for_log(&p),
+                        %reason,
+                        "ignoring invalid PIN env (numeric 4–64 digits required)"
+                    );
+                    None
+                }
             }
         });
 
@@ -109,6 +118,44 @@ impl ServerConfig {
     pub fn lockout_duration(&self) -> std::time::Duration {
         std::time::Duration::from_secs(self.lockout_time_minutes * 60)
     }
+}
+
+/// Minimum PIN length (digits). Shared with companion app verify handlers.
+pub const PIN_MIN_LEN: usize = 4;
+/// Maximum PIN length (digits).
+pub const PIN_MAX_LEN: usize = 64;
+
+/// Validate a companion-app access PIN.
+///
+/// Rules (must stay in lockstep with `shared_frontend::Login` input filter):
+/// - length in [`PIN_MIN_LEN`]..=[`PIN_MAX_LEN`]
+/// - **ASCII digits only** (`0`–`9`)
+///
+/// Returns the PIN string on success, or a short reason on failure.
+pub fn parse_numeric_pin(raw: &str) -> Result<String, &'static str> {
+    let pin = raw.trim();
+    let len = pin.chars().count();
+    if !(PIN_MIN_LEN..=PIN_MAX_LEN).contains(&len) {
+        return Err("length must be 4–64");
+    }
+    if !pin.chars().all(|c| c.is_ascii_digit()) {
+        return Err("must be digits only (0-9)");
+    }
+    Ok(pin.to_string())
+}
+
+/// `true` when `raw` is a valid numeric PIN (see [`parse_numeric_pin`]).
+#[must_use]
+pub fn is_valid_numeric_pin(raw: &str) -> bool {
+    parse_numeric_pin(raw).is_ok()
+}
+
+fn mask_pin_for_log(raw: &str) -> String {
+    let n = raw.chars().count();
+    if n == 0 {
+        return "(empty)".into();
+    }
+    format!("****({n} chars)")
 }
 
 /// Read an env var and parse to type `T`, falling back to `default` on missing/invalid.

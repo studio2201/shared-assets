@@ -59,10 +59,11 @@ fn pin_prefix_lookup_order() {
                 Some("12345678")
             );
 
-            unsafe { env::set_var("BEAM_PIN", "app_pin_12") };
+            // Prefix wins, and value must still be numeric digits.
+            unsafe { env::set_var("BEAM_PIN", "99998888") };
             assert_eq!(
                 ServerConfig::from_env("BEAM").pin.as_deref(),
-                Some("app_pin_12"),
+                Some("99998888"),
                 "prefix wins"
             );
         },
@@ -72,9 +73,52 @@ fn pin_prefix_lookup_order() {
 #[test]
 fn pin_rejected_when_too_short() {
     with_clean_env(&["BEAM_PIN"], || {
-        unsafe { env::set_var("BEAM_PIN", "abc") };
+        unsafe { env::set_var("BEAM_PIN", "123") };
         assert!(ServerConfig::from_env("BEAM").pin.is_none());
     });
+}
+
+#[test]
+fn pin_rejected_when_non_numeric() {
+    // Regression: operators set MARK_PIN=test and the Login UI (digits-only)
+    // could never match. ServerConfig must refuse non-digit PINs.
+    with_clean_env(&["BEAM_PIN", "PIN"], || {
+        for bad in ["test", "abc1", "12ab", "12 34", "12-34", "１２３４"] {
+            unsafe { env::set_var("BEAM_PIN", bad) };
+            assert!(
+                ServerConfig::from_env("BEAM").pin.is_none(),
+                "expected non-numeric PIN {bad:?} to be ignored"
+            );
+        }
+    });
+}
+
+#[test]
+fn pin_accepted_when_numeric_in_range() {
+    with_clean_env(&["BEAM_PIN", "PIN"], || {
+        for good in ["1234", "0000", "9876543210"] {
+            unsafe { env::set_var("BEAM_PIN", good) };
+            assert_eq!(
+                ServerConfig::from_env("BEAM").pin.as_deref(),
+                Some(good),
+                "expected numeric PIN {good:?} to be accepted"
+            );
+        }
+    });
+}
+
+#[test]
+fn parse_numeric_pin_unit_rules() {
+    use crate::server::config::{is_valid_numeric_pin, parse_numeric_pin};
+
+    assert_eq!(parse_numeric_pin("1234").as_deref(), Ok("1234"));
+    assert_eq!(parse_numeric_pin("  5678  ").as_deref(), Ok("5678"));
+    assert!(parse_numeric_pin("test").is_err());
+    assert!(parse_numeric_pin("12a4").is_err());
+    assert!(parse_numeric_pin("123").is_err());
+    assert!(parse_numeric_pin(&"1".repeat(65)).is_err());
+    assert!(is_valid_numeric_pin("4242"));
+    assert!(!is_valid_numeric_pin("test"));
 }
 
 #[test]

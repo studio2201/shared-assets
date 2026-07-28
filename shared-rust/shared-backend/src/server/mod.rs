@@ -19,7 +19,9 @@ pub mod version;
 mod tests;
 
 pub use bootstrap::serve;
-pub use config::ServerConfig;
+pub use config::{
+    PIN_MAX_LEN, PIN_MIN_LEN, ServerConfig, is_valid_numeric_pin, parse_numeric_pin,
+};
 pub use error::ServerError;
 pub use helpers::{LogEntry, MemoryEventLogger, is_loopback_bind, redacted_url};
 pub use ip::{get_client_ip, normalize_ip};

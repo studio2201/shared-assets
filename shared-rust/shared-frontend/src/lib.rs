@@ -20,7 +20,7 @@ pub use components::{
     language_switcher,
     language_switcher::{LanguageSwitcher, LanguageSwitcherProps},
     login,
-    login::{Login, LoginProps},
+    login::{Login, LoginProps, filter_numeric_pin},
     notifier,
     notifier::{
         Banner, BannerProps, ToastContainer, ToastContainerProps, ToastNotification,

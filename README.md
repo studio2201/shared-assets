@@ -82,6 +82,10 @@ shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag
 
 Session IDs and cookie builders stay **app-local** (auth identity blast radius).
 
+**PIN values must be ASCII digits only (4–64).** Non-numeric env values
+(e.g. `MARK_PIN=test`) are ignored at config parse time so the Login UI
+(digit-only) can always enter a configured PIN.
+
 ---
 
 ### License
