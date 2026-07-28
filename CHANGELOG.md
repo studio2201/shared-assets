@@ -5,6 +5,23 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-07-28
+
+### Added — Web UI kit
+
+- **`styles/components/{buttons,cards,forms,notifications,shell}.css`** — full chrome
+  kit beyond themes/header/footer/login.
+- **`styles/kit.css`** — optional single import for bundlers that resolve `@import`.
+- **`AppShell`** Yew component — standard header / main / footer / toast frame.
+- **`Banner`** component + toast types **`Info`** / **`Warning`** (plus Success/Error).
+- **`LoginProps::error_message`** — optional field error under the PIN input.
+- **`scripts/sync-web-ui.sh`** — rsync styles into companion app trees.
+- README rewritten around **web UI ownership** (chrome in shared, domain in apps).
+
+### Changed
+
+- Workspace version **3.2.0 → 3.3.0**.
+
 ## [3.2.0] - 2026-07-28
 
 ### Policy

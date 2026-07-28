@@ -1,8 +1,9 @@
-//! Shared Yew UI components.
+//! Shared Yew UI components — the studio2201 web chrome kit.
 //!
-//! Each component lives in its own submodule to keep file sizes manageable
-//! and concerns separated.
+//! Use these for **all** companion UIs: header, footer, login, toasts,
+//! language switcher, and full-page [`app_shell::AppShell`].
 
+pub mod app_shell;
 pub mod footer;
 pub mod header;
 pub mod language_switcher;

@@ -1,0 +1,13 @@
+/* studio2201 Web UI kit — import order for full chrome */
+
+@import url("themes/themes.css");
+@import url("components/body.css");
+@import url("components/shell.css");
+@import url("components/buttons.css");
+@import url("components/cards.css");
+@import url("components/forms.css");
+@import url("components/notifications.css");
+@import url("layout/header.css");
+@import url("layout/footer.css");
+@import url("pages/login.css");
+@import url("pages/print.css");

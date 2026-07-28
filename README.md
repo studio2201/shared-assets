@@ -3,53 +3,83 @@
 </h1>
 
 <p align="center">
-  <b>Centralized design system tokens, CSS utilities, icons, and shared Rust crates for studio2201 applications.</b>
+  <b>studio2201 Web UI kit + server helpers for every companion app.</b>
 </p>
 
 ---
 
-### Shared Sub-Crates & Assets
+## Web UI kit (primary purpose)
 
-This repository provides reusable core building blocks for the entire studio2201 org:
+**shared-assets owns the product chrome** — not product domain logic.
 
-- `shared-core`: Common data types, internationalization (i18n) tables, and domain validation.
-- `shared-backend`: Axum security middleware, PIN authentication, CORS, HSTS, and rate-limiting.
-- `shared-frontend`: Yew UI components, theme definitions, and CSS design system utilities.
-- `styles/`: Global CSS design tokens, glassmorphism utilities, and color themes.
+| Layer | Contents |
+|-------|----------|
+| **`styles/`** | Themes, body, shell, header, footer, login, buttons, cards, forms, notifications, print |
+| **`shared-frontend`** | Yew: `AppShell`, `Header`, `Footer`, `Login`, `ToastContainer` / `ToastNotification` / `Banner`, language switcher, theme helpers |
+| **`shared-core`** | Language enum, shared i18n tables, PIN wire types, utils |
+| **`shared-backend`** | Security middleware, tracing, rate limit, server config (optional) |
+
+### Styles entrypoints
+
+Individual files (Trunk-friendly):
+
+```text
+styles/themes/themes.css
+styles/components/body.css
+styles/components/shell.css
+styles/components/buttons.css
+styles/components/cards.css
+styles/components/forms.css
+styles/components/notifications.css
+styles/layout/header.css
+styles/layout/footer.css
+styles/pages/login.css
+styles/pages/print.css
+```
+
+Or one import: `styles/kit.css` (if your bundler resolves `@import`).
+
+### Sync styles into apps
+
+```bash
+./scripts/sync-web-ui.sh
+# or one app:
+./scripts/sync-web-ui.sh ../beam
+```
+
+### Yew usage
+
+```rust
+use shared_frontend::{
+    AppShell, Footer, FooterProps, Header, HeaderProps, Login, LoginProps,
+    ToastContainer, ToastNotification, ToastType,
+};
+```
+
+Product screens (file explorer, game board, todo lists) stay **in the app**.  
+Chrome (header/footer/login/toasts/theme) lives **here**.
+
+### Non-Yew apps (StateSync / Maud)
+
+Use **styles + shared-core + shared-backend**. Map theme CSS variables into the Maud layout (see StateSync). Do not depend on Yew components.
 
 ---
 
-### Architecture & Security
+## Independence
 
-- **Independent products**: each app installs, runs, and upgrades alone. See [INDEPENDENCE.md](INDEPENDENCE.md).
-- **Axum Security Middleware**: optional CORS / HSTS / security headers / origin helpers.
-- **Yew UI Design Tokens**: themes, Header / Footer (optional Login).
-- **App-local auth secrets path**: session IDs and cookie builders live **in each app** (isolation). Shared `session_id` / `cookie_auth` are deprecated convenience only.
-- **Shared utilities**: rate limiter, PIN attempt counters, server config, tracing — optional.
-
-### What to take from this repo
-
-| Use shared | Keep in the app |
-|------------|-----------------|
-| Themes + layout CSS | Session ID generation |
-| Header / Footer | Cookie name + builders |
-| CORS / HSTS / security headers | `verify_pin` / logout handlers |
-| Origin-check helpers | Domain models & routes |
-| RateLimiter (optional) | Deploy (Docker / Unraid) |
-| ServerConfig / tracing | App CSS & product i18n |
-
-### Pin policy (within one app only)
-
-Inside a single app, pin `shared-core` / `shared-backend` / `shared-frontend` to the **same** tag (avoid dual crate graphs). **Different apps may use different tags.**
+Apps install and upgrade separately. See [INDEPENDENCE.md](INDEPENDENCE.md).  
+Within one app, pin `shared-core` / `shared-backend` / `shared-frontend` to the **same tag**.
 
 ```toml
-shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
-shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
-shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
+shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
+shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
 ```
+
+Session IDs and cookie builders stay **app-local** (auth identity blast radius).
 
 ---
 
 ### License
 
-Distributed under the Apache 2.0 License. See [LICENSE](LICENSE) for details.
+Apache 2.0. See [LICENSE](LICENSE).

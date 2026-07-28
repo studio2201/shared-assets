@@ -1,0 +1,77 @@
+/* ==========================================
+   Buttons
+   ========================================== */
+
+.btn,
+button.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--button-hover, var(--container));
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition),
+        color var(--transition), transform 0.12s ease;
+}
+
+.btn:hover:not(:disabled),
+button.btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.btn:disabled,
+button.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary,
+button.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled),
+button.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
+}
+
+.btn-danger,
+button.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: var(--danger-color, #ef4444);
+}
+
+.btn-ghost,
+button.btn-ghost {
+    background: transparent;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
+.btn-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: 10px;
+}

@@ -41,7 +41,11 @@ pub struct LoginProps {
     /// Optional element id for the form, useful for tests.
     #[prop_or_default]
     pub form_id: Option<String>,
+    /// Optional error string shown under the PIN field.
+    #[prop_or_default]
+    pub error_message: Option<String>,
 }
+
 
 /// Numeric-PIN login form.
 #[function_component(Login)]
@@ -136,8 +140,14 @@ pub fn login(props: &LoginProps) -> Html {
                             placeholder={placeholder}
                             maxlength={pin_len.to_string()}
                             autofocus={props.autofocus}
+                            aria-describedby="pin-description"
                         />
                     </div>
+                    if let Some(err) = props.error_message.as_ref() {
+                        if !err.is_empty() {
+                            <p class="field-error" role="alert">{ err }</p>
+                        }
+                    }
                 </form>
             </div>
         </div>
@@ -161,6 +171,7 @@ mod tests {
             autofocus: true,
             language: Some(Language::English),
             form_id: None,
+            error_message: None,
         };
         assert_eq!(p.pin_length, 4);
         assert!(p.autofocus);

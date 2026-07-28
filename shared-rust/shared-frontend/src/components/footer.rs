@@ -28,6 +28,21 @@ pub struct FooterProps {
     pub children: Html,
 }
 
+impl Default for FooterProps {
+    fn default() -> Self {
+        Self {
+            show_version: false,
+            version: String::new(),
+            show_github: true,
+            github_url: None,
+            version_url: None,
+            show_coffee: true,
+            coffee_url: None,
+            children: Html::default(),
+        }
+    }
+}
+
 /// Bottom-of-page footer shared by all companion apps.
 #[function_component(Footer)]
 pub fn footer(props: &FooterProps) -> Html {

@@ -9,16 +9,21 @@ pub use utils::EventListener;
 
 pub mod i18n;
 
-// Re-exports for ergonomics
+// Re-exports — web UI kit surface for every companion app
 pub use components::{
+    app_shell,
+    app_shell::{AppShell, AppShellProps},
     footer,
-    footer::Footer,
+    footer::{Footer, FooterProps},
     header,
-    header::Header,
+    header::{Header, HeaderProps},
     language_switcher,
     language_switcher::{LanguageSwitcher, LanguageSwitcherProps},
     login,
     login::{Login, LoginProps},
     notifier,
-    notifier::{ToastContainer, ToastNotification, ToastType},
+    notifier::{
+        Banner, BannerProps, ToastContainer, ToastContainerProps, ToastNotification,
+        ToastNotificationProps, ToastType,
+    },
 };
