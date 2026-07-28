@@ -94,6 +94,37 @@ use shared_frontend::{
 Product screens (file explorer, game board, todo lists) stay **in the app**.  
 Chrome (header/footer/login/toasts/theme) lives **here**.
 
+### AppShell GitHub links (title + version)
+
+Every companion app should pass the studio2201 repo slug so chrome links work:
+
+| UI | Prop | Destination |
+|----|------|-------------|
+| Header title | `HeaderProps::repo` (e.g. `"probe"`) | `https://github.com/studio2201/{repo}` |
+| Footer `vX.Y.Z` | `FooterProps::repo` + `version` + `show_version: true` | `https://github.com/studio2201/{repo}/releases/tag/vX.Y.Z` |
+
+```rust
+let header = HeaderProps {
+    site_title: "Probe".into(),
+    repo: Some("probe".into()),
+    // ...
+    ../* other required fields */
+};
+let footer = FooterProps {
+    repo: Some("probe".into()),
+    show_version: true,
+    version: env!("CARGO_PKG_VERSION").into(),
+    ..FooterProps::default()
+};
+```
+
+Validate:
+
+```bash
+./scripts/check-appshell-links.sh
+./scripts/check-appshell-links.sh ../mark
+```
+
 ### Non-Yew apps (StateSync / Maud)
 
 Use **styles + shared-core + shared-backend**. Map theme CSS variables into the Maud layout (see StateSync). Do not depend on Yew components.

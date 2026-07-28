@@ -5,6 +5,18 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.7] - 2026-07-28
+
+### Added
+
+- **`scripts/check-appshell-links.sh`** — asserts every Yew companion wires
+  `HeaderProps::repo` + `FooterProps::repo` / `show_version` / `version`
+  (title → GH repo, footer version → release tag). StateSync Maud checked too.
+
+### Docs
+
+- AppShell GitHub link contract (title + version) with prop table and example.
+
 ## [3.3.6] - 2026-07-28
 
 ### Added
