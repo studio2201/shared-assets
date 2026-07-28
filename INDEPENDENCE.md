@@ -8,6 +8,17 @@ studio2201 apps are **independent products**.
 
 `shared-assets` is an **optional build-time toolkit**, not a runtime platform and not a monorepo mandate.
 
+## All studio2201 apps use shared-assets
+
+Including **StateSync** (Maud dashboard, not Yew). How much of the kit each app takes depends on stack:
+
+| Stack | Typical shared use |
+|-------|-------------------|
+| **Yew + Axum** (Beam, Pad, games, …) | `shared-core` + `shared-backend` + `shared-frontend` + vendored `styles/` |
+| **Maud + Axum** (StateSync) | `shared-core` + `shared-backend` (tracing, etc.) + vendored `styles/themes` (brand tokens). Not Yew components. |
+
+Independence = separate install/run/upgrade. **Not** “skip the brand kit.”
+
 ## What belongs in shared-assets
 
 | Keep shared | Why |
