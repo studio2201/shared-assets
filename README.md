@@ -31,9 +31,9 @@ This repository provides reusable core building blocks for the entire studio2201
 Always pin `shared-core`, `shared-backend`, and `shared-frontend` to the **same git tag**:
 
 ```toml
-shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
-shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
-shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
+shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
+shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
 ```
 
 Never mix tags inside one app (duplicate `shared-core` graphs and type identity bugs).
