@@ -44,12 +44,47 @@ pub struct HeaderProps {
     pub enable_print: bool,
     pub print_disabled: bool,
 
+    /// Explicit URL for the title link. Wins over [`Self::repo`].
+    /// When both this and `repo` are `None`, a GitHub URL is derived from
+    /// `site_title` (see [`resolve_title_href`]).
     #[prop_or_default]
     pub site_url: Option<String>,
+    /// studio2201 repo slug for the title link, e.g. `"probe"` →
+    /// `https://github.com/studio2201/probe`. Preferred over deriving from
+    /// the display title so a custom `SITE_TITLE` still links to the repo.
+    #[prop_or_default]
+    pub repo: Option<String>,
     #[prop_or_default]
     pub version: Option<String>,
     #[prop_or_default]
     pub version_url: Option<String>,
+}
+
+/// Build the header title `href`.
+///
+/// Priority:
+/// 1. explicit `site_url` if non-empty
+/// 2. `https://github.com/studio2201/{repo}` if `repo` is non-empty
+/// 3. `https://github.com/studio2201/{slug}` where `slug` is `site_title`
+///    lowercased with non-alphanumerics stripped
+#[must_use]
+pub fn resolve_title_href(
+    site_url: Option<&str>,
+    repo: Option<&str>,
+    site_title: &str,
+) -> String {
+    if let Some(url) = site_url.map(str::trim).filter(|s| !s.is_empty()) {
+        return url.to_string();
+    }
+    if let Some(repo) = repo.map(str::trim).filter(|s| !s.is_empty()) {
+        return format!("https://github.com/studio2201/{repo}");
+    }
+    let slug: String = site_title
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric())
+        .collect::<String>()
+        .to_ascii_lowercase();
+    format!("https://github.com/studio2201/{slug}")
 }
 
 /// Top-of-page navigation bar shared by all companion apps.
@@ -147,26 +182,30 @@ pub fn header(props: &HeaderProps) -> Html {
         });
     }
 
-    let site_url = props.site_url.clone().unwrap_or_else(|| {
-        format!(
-            "https://github.com/studio2201/{}",
-            props.site_title.to_lowercase()
-        )
-    });
+    let title_href = resolve_title_href(
+        props.site_url.as_deref(),
+        props.repo.as_deref(),
+        &props.site_title,
+    );
+    let title_label = format!("Open {} on GitHub", props.site_title);
 
     let title_html = html! {
-        <a class="header-title-link" href={site_url} target="_blank" rel="noopener noreferrer">
+        <a
+            class="header-title-link"
+            href={title_href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={title_label.clone()}
+            aria-label={title_label}
+        >
             <h1>{&props.site_title}</h1>
         </a>
     };
-
-    let version_html = html! {};
 
     html! {
         <header>
             <div id="header-title">
                 {title_html}
-                {version_html}
             </div>
 
             <div class="header-right">
@@ -176,5 +215,51 @@ pub fn header(props: &HeaderProps) -> Html {
                 {logout_button(props.pin_required, logout_disabled, onclick_logout, logout_tooltip)}
             </div>
         </header>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::resolve_title_href;
+
+    #[test]
+    fn explicit_site_url_wins() {
+        assert_eq!(
+            resolve_title_href(Some("https://example.com/x"), Some("probe"), "Probe"),
+            "https://example.com/x"
+        );
+    }
+
+    #[test]
+    fn repo_slug_builds_github_url() {
+        assert_eq!(
+            resolve_title_href(None, Some("probe"), "Custom Title"),
+            "https://github.com/studio2201/probe"
+        );
+    }
+
+    #[test]
+    fn title_fallback_lowercases_and_strips() {
+        assert_eq!(
+            resolve_title_href(None, None, "Probe"),
+            "https://github.com/studio2201/probe"
+        );
+        assert_eq!(
+            resolve_title_href(None, None, "StateSync"),
+            "https://github.com/studio2201/statesync"
+        );
+        // spaces / punctuation stripped so display titles still map to a repo slug
+        assert_eq!(
+            resolve_title_href(None, None, "My Probe!"),
+            "https://github.com/studio2201/myprobe"
+        );
+    }
+
+    #[test]
+    fn empty_site_url_falls_through_to_repo() {
+        assert_eq!(
+            resolve_title_href(Some("  "), Some("mark"), "Mark"),
+            "https://github.com/studio2201/mark"
+        );
     }
 }

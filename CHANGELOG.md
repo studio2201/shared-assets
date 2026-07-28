@@ -5,6 +5,16 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.3] - 2026-07-28
+
+### Changed
+
+- **Header title → GitHub repo** — app name is always a link. New optional
+  `HeaderProps::repo` (e.g. `"probe"`) builds `https://github.com/studio2201/{repo}`.
+  Explicit `site_url` still wins; otherwise slug from `site_title`.
+- **`resolve_title_href`** helper + unit tests.
+- Title link hover/focus uses primary color so it is discoverable.
+
 ## [3.3.2] - 2026-07-28
 
 ### Fixed / enforced

@@ -16,7 +16,7 @@ pub use components::{
     footer,
     footer::{Footer, FooterProps},
     header,
-    header::{Header, HeaderProps},
+    header::{Header, HeaderProps, resolve_title_href},
     language_switcher,
     language_switcher::{LanguageSwitcher, LanguageSwitcherProps},
     login,

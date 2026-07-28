@@ -49,6 +49,19 @@ header {
     color: inherit;
     display: inline-flex;
     align-items: baseline;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: color var(--transition), opacity var(--transition);
+}
+
+.header-title-link:hover h1,
+.header-title-link:focus-visible h1 {
+    color: var(--primary, #2dd4bf);
+}
+
+.header-title-link:focus-visible {
+    outline: 2px solid var(--primary, #2dd4bf);
+    outline-offset: 4px;
 }
 
 .header-version-link {

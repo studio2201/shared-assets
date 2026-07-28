@@ -70,6 +70,7 @@ pub fn app_shell(props: &AppShellProps) -> Html {
                 enable_print={props.header.enable_print}
                 print_disabled={props.header.print_disabled}
                 site_url={props.header.site_url.clone()}
+                repo={props.header.repo.clone()}
                 version={props.header.version.clone()}
                 version_url={props.header.version_url.clone()}
             />
