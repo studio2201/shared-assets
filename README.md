@@ -24,6 +24,19 @@ This repository provides reusable core building blocks for the entire studio2201
 - **Axum Security Middleware**: Standardized security headers, origin validation, and PIN brute-force protection.
 - **Yew UI Design Tokens**: Harmonious color palettes and responsive layout components.
 - **Zero-Dependency Rust Core**: High-efficiency shared logic compiled into all studio2201 applications.
+- **Maximum DRY (v3.1+)**: session id generation, cookie builders, rate limiter, and origin helpers live here. Apps supply cookie **names** and product domain code only.
+
+### Pin policy
+
+Always pin `shared-core`, `shared-backend`, and `shared-frontend` to the **same git tag**:
+
+```toml
+shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
+shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.0" }
+```
+
+Never mix tags inside one app (duplicate `shared-core` graphs and type identity bugs).
 
 ---
 

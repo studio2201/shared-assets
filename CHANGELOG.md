@@ -3,6 +3,36 @@
 All notable changes to `shared-assets` will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.1.0] - 2026-07-28
+
+### Policy
+
+- **Maximum DRY (Option B).** Platform PIN-auth primitives are shared again.
+  Apps keep **cookie names** and product domain code; builders, session RNG,
+  rate limiting, and origin helpers live here. This **reverses** the
+  isolation rationale of 3.0.39 for `session_id` / `cookie_auth`.
+- **Pin policy:** every app must depend on `shared-core`, `shared-backend`,
+  and `shared-frontend` at the **same git tag**. Never mix tags in one app.
+
+### Added
+
+- **`session_id::generate_session_id`** — restored (OsRng / thread RNG,
+  32-char hex). Prefer this over per-app `/dev/urandom` + SHA256 fallbacks.
+- **`cookie_auth::{build_cookie, build_clear_cookie, cookie_should_be_secure}`**
+  — restored; cookie **name** remains an argument.
+- **`cookie_auth::{build_cookie_with_same_site, build_clear_cookie_with_same_site}`**
+  — SameSite parameter (default path uses `Strict`; Beam can pass `Lax`).
+
+### Changed
+
+- Workspace version **3.0.39 → 3.1.0**.
+
+### Deprecated
+
+- **`auth::session` hard-coded `pin` cookie helpers** — prefer parameterized
+  `cookie_auth` with per-app names (`BEAM_PIN`, `DEFEND_PIN`, …).
 
 ## [3.0.39] - 2026-07-23
 
@@ -25,9 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Each app tunes its own cookie semantics (clamp range, cookie name,
   SameSite policy); the shared signature was a leaky abstraction.
 
-## [3.0.38] - 2026-07-23and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased] - 2026-07-23
+## [3.0.38] - 2026-07-23
 
 ### Changed
 - **Audit Wave**: Org-wide consolidation of `shared-assets` usage.
@@ -36,14 +64,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `cookie_auth::{build_cookie, cookie_should_be_secure}`, the shared
   `Login` component, `app_error::AppError`, and
   `auth::origin_check::{origin_matches, forbidden_response, ...}`.
-  The web apps' duplicated auth helpers, config, types, security
-  headers, CSS, and `bin/sh/tui.rs` shells have been removed in
-  favour of the shared implementations.
-- **Pre-wave**: Removed the per-app interactive TUI admin console
-  in favour of the existing CUI subcommands.
-- **Per-app refactor**: file size cap enforcement (≤ 250 LoC/.rs)
-  applied where the audit flagged oversize files.
-
 
 ## [3.0.36] - 2026-07-23
 

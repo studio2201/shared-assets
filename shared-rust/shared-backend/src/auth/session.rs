@@ -1,5 +1,11 @@
 //! Cookie issuance helpers for session management.
 //!
+//! # Deprecated
+//!
+//! Prefer [`crate::cookie_auth`] with an **app-specific cookie name**
+//! (`BEAM_PIN`, `DEFEND_PIN`, …). This module hard-codes the cookie name
+//! `pin` and is retained only for legacy callers.
+//!
 //! Apps call [`issue_cookie`] when a user successfully authenticates to
 //! set a `pin` cookie that subsequent requests can present.
 
