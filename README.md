@@ -21,22 +21,32 @@ This repository provides reusable core building blocks for the entire studio2201
 
 ### Architecture & Security
 
-- **Axum Security Middleware**: Standardized security headers, origin validation, and PIN brute-force protection.
-- **Yew UI Design Tokens**: Harmonious color palettes and responsive layout components.
-- **Zero-Dependency Rust Core**: High-efficiency shared logic compiled into all studio2201 applications.
-- **Maximum DRY (v3.1+)**: session id generation, cookie builders, rate limiter, and origin helpers live here. Apps supply cookie **names** and product domain code only.
+- **Independent products**: each app installs, runs, and upgrades alone. See [INDEPENDENCE.md](INDEPENDENCE.md).
+- **Axum Security Middleware**: optional CORS / HSTS / security headers / origin helpers.
+- **Yew UI Design Tokens**: themes, Header / Footer (optional Login).
+- **App-local auth secrets path**: session IDs and cookie builders live **in each app** (isolation). Shared `session_id` / `cookie_auth` are deprecated convenience only.
+- **Shared utilities**: rate limiter, PIN attempt counters, server config, tracing — optional.
 
-### Pin policy
+### What to take from this repo
 
-Always pin `shared-core`, `shared-backend`, and `shared-frontend` to the **same git tag**:
+| Use shared | Keep in the app |
+|------------|-----------------|
+| Themes + layout CSS | Session ID generation |
+| Header / Footer | Cookie name + builders |
+| CORS / HSTS / security headers | `verify_pin` / logout handlers |
+| Origin-check helpers | Domain models & routes |
+| RateLimiter (optional) | Deploy (Docker / Unraid) |
+| ServerConfig / tracing | App CSS & product i18n |
+
+### Pin policy (within one app only)
+
+Inside a single app, pin `shared-core` / `shared-backend` / `shared-frontend` to the **same** tag (avoid dual crate graphs). **Different apps may use different tags.**
 
 ```toml
-shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
-shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
-shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.1.1" }
+shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
+shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.2.0" }
 ```
-
-Never mix tags inside one app (duplicate `shared-core` graphs and type identity bugs).
 
 ---
 

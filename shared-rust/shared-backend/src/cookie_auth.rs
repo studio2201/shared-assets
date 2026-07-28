@@ -1,9 +1,17 @@
-//! Build the authentication `Set-Cookie` value used by every auth-flow
-//! handler so cookie semantics stay identical across login, verify, and
-//! logout endpoints.
+//! Build the authentication `Set-Cookie` value.
 //!
-//! Restored in **v3.1.0** (Maximum DRY). Cookie **names** stay per-app
-//! (`BEAM_PIN`, `DEFEND_PIN`, …); builders live here.
+//! # Deprecated (independence)
+//!
+//! Prefer **per-app** cookie builders with a baked-in cookie name
+//! (`BEAM_PIN`, `DEFEND_PIN`, …) so cookie policy and blast radius stay
+//! product-local. See `INDEPENDENCE.md`.
+//!
+//! These helpers remain available for gradual migration only.
+
+#![deprecated(
+    since = "3.2.0",
+    note = "copy into each app for product independence; see INDEPENDENCE.md"
+)]
 
 use axum_extra::extract::cookie::{Cookie, SameSite};
 use time::Duration;
@@ -114,6 +122,7 @@ fn clamp_seconds(seconds: i64) -> u64 {
     unsigned
 }
 
+#[allow(deprecated)]
 #[cfg(test)]
 mod tests {
     use super::*;

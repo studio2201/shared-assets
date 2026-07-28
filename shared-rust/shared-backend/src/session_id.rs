@@ -1,8 +1,18 @@
 //! Cryptographically random session-id generation.
 //!
+//! # Deprecated (independence)
+//!
+//! Prefer a **per-app** `generate_session_id` so a bug here cannot
+//! compromise every product at once. See `INDEPENDENCE.md`.
+//!
 //! Always draws from the operating system's CSPRNG (`OsRng`). Falls back
 //! to a thread-local RNG only if `OsRng` itself fails (essentially never
 //! on supported platforms).
+
+#![deprecated(
+    since = "3.2.0",
+    note = "copy into each app for product independence; see INDEPENDENCE.md"
+)]
 
 use rand::rngs::OsRng;
 use rand::{TryRngCore, rng};
@@ -35,6 +45,7 @@ pub fn generate_session_id() -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
 
+#[allow(deprecated)]
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -5,6 +5,25 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-07-28
+
+### Policy
+
+- **Product independence** is the goal. Apps install, run, and upgrade
+  separately. See [INDEPENDENCE.md](INDEPENDENCE.md).
+- `shared-assets` is an optional **build-time toolkit** (chrome, middleware,
+  pure helpers), not a multi-app runtime platform.
+- Apps **need not** share the same git tag.
+
+### Deprecated
+
+- **`session_id`** — prefer a local copy per app (blast radius).
+- **`cookie_auth`** — prefer local builders with a baked-in cookie name.
+
+### Added
+
+- **INDEPENDENCE.md** — what stays shared vs app-local.
+
 ## [3.1.1] - 2026-07-28
 
 ### Changed
