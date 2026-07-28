@@ -5,6 +5,15 @@ All notable changes to `shared-assets` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.5] - 2026-07-28
+
+### Fixed / docs
+
+- **App tab icons** — document that companions must use service-specific
+  `assets/favicon.png` (same as `icon.png`) as the primary tab icon.
+- **`scripts/check-app-icons.sh`** — fails if the legacy red-check SVG is
+  present or if `index.html` prefers SVG over the brand PNG.
+
 ## [3.3.4] - 2026-07-28
 
 ### Changed

@@ -48,7 +48,23 @@ Or one import: `styles/kit.css` (if your bundler resolves `@import`).
 ```
 
 That script vendors **`styles/` only** into `assets/shared-assets/styles/`.  
-Do **not** vendor `shared-rust/` into apps (stale copies, unused by Cargo).  
+Do **not** vendor `shared-rust/` into apps (stale copies, unused by Cargo).
+
+### App tab icons (favicon)
+
+Each companion app owns its brand icon under **`assets/icon.png`** and must
+ship the **same file** as **`assets/favicon.png`** for the browser tab.
+
+- Primary `<link rel="icon">` must be the **PNG**, not a shared/stale SVG.
+- Do **not** use the legacy red-check `favicon.svg` from old scaffolds.
+- Validate with:
+
+```bash
+./scripts/check-app-icons.sh
+./scripts/check-app-icons.sh ../mark
+```
+
+  
 Rust crates come from the git tag; session/cookie helpers stay **app-local**.
 
 ### Yew usage
