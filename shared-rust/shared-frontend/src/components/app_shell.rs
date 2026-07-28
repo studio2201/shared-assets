@@ -83,6 +83,7 @@ pub fn app_shell(props: &AppShellProps) -> Html {
                 show_github={props.footer.show_github}
                 github_url={props.footer.github_url.clone()}
                 version_url={props.footer.version_url.clone()}
+                repo={props.footer.repo.clone()}
                 show_coffee={props.footer.show_coffee}
                 coffee_url={props.footer.coffee_url.clone()}
             >

@@ -14,7 +14,7 @@ pub use components::{
     app_shell,
     app_shell::{AppShell, AppShellProps},
     footer,
-    footer::{Footer, FooterProps},
+    footer::{Footer, FooterProps, normalize_version_tag, resolve_version_href},
     header,
     header::{Header, HeaderProps, resolve_title_href},
     language_switcher,
