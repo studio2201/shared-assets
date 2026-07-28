@@ -47,6 +47,10 @@ Or one import: `styles/kit.css` (if your bundler resolves `@import`).
 ./scripts/sync-web-ui.sh ../beam
 ```
 
+That script vendors **`styles/` only** into `assets/shared-assets/styles/`.  
+Do **not** vendor `shared-rust/` into apps (stale copies, unused by Cargo).  
+Rust crates come from the git tag; session/cookie helpers stay **app-local**.
+
 ### Yew usage
 
 ```rust
@@ -71,9 +75,9 @@ Apps install and upgrade separately. See [INDEPENDENCE.md](INDEPENDENCE.md).
 Within one app, pin `shared-core` / `shared-backend` / `shared-frontend` to the **same tag**.
 
 ```toml
-shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
-shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
-shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.0" }
+shared-core     = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.1" }
+shared-backend  = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.1" }
+shared-frontend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.3.1" }
 ```
 
 Session IDs and cookie builders stay **app-local** (auth identity blast radius).

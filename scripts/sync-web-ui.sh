@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # Sync shared-assets web UI styles into companion app trees.
+#
+# Vendors **styles only** under assets/shared-assets/styles/.
+# Do NOT copy shared-rust into apps — Cargo pulls crates from the
+# git tag (e.g. v3.3.1). Session/cookie stay app-local.
+#
 # Usage:
 #   ./scripts/sync-web-ui.sh                  # all apps under ../
 #   ./scripts/sync-web-ui.sh /path/to/beam    # one app
@@ -11,12 +16,8 @@ STYLES_SRC="$ROOT/styles"
 sync_one() {
   local app="$1"
   local dest=""
-  if [ -d "$app/assets/shared-assets" ] || [ -d "$app/frontend" ]; then
-    dest="$app/assets/shared-assets/styles"
-  elif [ -d "$app/frontend/shared-assets" ]; then
-    dest="$app/frontend/shared-assets/styles"
-  elif [ -d "$app/src/dashboard" ]; then
-    # StateSync (Maud)
+  if [ -d "$app/assets/shared-assets" ] || [ -d "$app/frontend" ] || [ -d "$app/src/dashboard" ]; then
+    # Canonical path for every studio2201 app (Yew Trunk + Maud).
     dest="$app/assets/shared-assets/styles"
   else
     echo "skip (no UI tree): $app"
