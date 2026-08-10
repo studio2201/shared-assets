@@ -1,7 +1,26 @@
-# Rust build artifacts
+# ==========================================
+# GLOBAL ORG IGNORES (Agent, OS, IDE, Build)
+# ==========================================
+.agents/
+scratch/
+.env
+.env.*
+.envrc
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+/target/
 target/
-**/target/
-
+**/*.rs.bk
+*.pdb
+__pycache__/
+*.pyc
+# ==========================================
+# Rust build artifacts
 # Cargo.lock for libraries (committed only for binaries/workspaces)
 /Cargo.lock
 
@@ -11,26 +30,16 @@ frontend/dist/
 frontend/target/
 
 # Local configuration
-.env
 .env.local
 .env.*.local
-
 # Local databases and user data
 data/
 uploads/
 local_uploads/
 
 # IDE/Editor config
-.vscode/
-.idea/
-*.swp
-*.swo
 .cursor/
-
 # OS specific files
-.DS_Store
-Thumbs.db
-
 # UBI build artifacts
 result
 result-*
