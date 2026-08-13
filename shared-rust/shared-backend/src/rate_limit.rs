@@ -18,11 +18,23 @@ pub const DEFAULT_MAX_REQUESTS: usize = 100;
 pub const DEFAULT_WINDOW: Duration = Duration::from_secs(60);
 
 /// In-memory per-IP sliding-window counter map.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct RateLimiter {
-    inner: HashMap<IpAddr, Vec<Instant>>,
+    inner: HashMap<IpAddr, WindowState>,
     max_requests: usize,
     window: Duration,
+}
+
+#[derive(Debug)]
+struct WindowState {
+    start: Instant,
+    count: usize,
+}
+
+impl Default for RateLimiter {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl RateLimiter {
@@ -50,13 +62,20 @@ impl RateLimiter {
     /// allowed (under budget), or `false` if the budget is exhausted.
     pub fn check(&mut self, ip: IpAddr) -> bool {
         let now = Instant::now();
-        let timestamps = self.inner.entry(ip).or_default();
-        timestamps.retain(|&t| now.duration_since(t) < self.window);
+        let state = self.inner.entry(ip).or_insert_with(|| WindowState {
+            start: now,
+            count: 0,
+        });
 
-        if timestamps.len() >= self.max_requests {
+        if now.duration_since(state.start) >= self.window {
+            state.start = now;
+            state.count = 0;
+        }
+
+        if state.count >= self.max_requests {
             false
         } else {
-            timestamps.push(now);
+            state.count += 1;
             true
         }
     }
@@ -65,10 +84,7 @@ impl RateLimiter {
     /// Call periodically from a background task to bound memory.
     pub fn cleanup(&mut self) {
         let now = Instant::now();
-        self.inner.retain(|_, timestamps| {
-            timestamps.retain(|&t| now.duration_since(t) < self.window);
-            !timestamps.is_empty()
-        });
+        self.inner.retain(|_, state| now.duration_since(state.start) < self.window);
     }
 
     /// Number of distinct IPs currently being tracked. Useful for

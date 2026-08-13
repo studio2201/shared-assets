@@ -6,7 +6,7 @@
 //! they survive across requests.
 
 use std::collections::HashMap;
-use std::sync::{Mutex, OnceLock};
+use std::sync::{OnceLock, RwLock};
 use std::time::Instant;
 
 /// Single attempt record.
@@ -16,9 +16,9 @@ pub struct Attempt {
     pub last_attempt: Instant,
 }
 
-fn login_attempts() -> &'static Mutex<HashMap<String, Attempt>> {
-    static ATTEMPTS: OnceLock<Mutex<HashMap<String, Attempt>>> = OnceLock::new();
-    ATTEMPTS.get_or_init(|| Mutex::new(HashMap::new()))
+fn login_attempts() -> &'static RwLock<HashMap<String, Attempt>> {
+    static ATTEMPTS: OnceLock<RwLock<HashMap<String, Attempt>>> = OnceLock::new();
+    ATTEMPTS.get_or_init(|| RwLock::new(HashMap::new()))
 }
 
 /// True if the given IP is currently locked out.
@@ -27,21 +27,30 @@ fn login_attempts() -> &'static Mutex<HashMap<String, Attempt>> {
 /// and the IP is allowed to try again.
 #[must_use]
 pub fn is_locked_out(ip: &str, max_attempts: u32, lockout_duration: std::time::Duration) -> bool {
-    if let Ok(mut attempts) = login_attempts().lock()
-        && let Some(attempt) = attempts.get(ip).cloned()
-        && attempt.count >= max_attempts
-    {
-        if attempt.last_attempt.elapsed() < lockout_duration {
-            return true;
+    let mut remove_ip = false;
+    if let Ok(attempts) = login_attempts().read() {
+        if let Some(attempt) = attempts.get(ip) {
+            if attempt.count >= max_attempts {
+                if attempt.last_attempt.elapsed() < lockout_duration {
+                    return true;
+                } else {
+                    remove_ip = true;
+                }
+            }
         }
-        attempts.remove(ip);
+    }
+    
+    if remove_ip {
+        if let Ok(mut attempts_write) = login_attempts().write() {
+            attempts_write.remove(ip);
+        }
     }
     false
 }
 
 /// Record a failed attempt and return the updated record.
 pub fn record_attempt(ip: &str) -> Attempt {
-    if let Ok(mut attempts) = login_attempts().lock() {
+    if let Ok(mut attempts) = login_attempts().write() {
         let now = Instant::now();
         let entry = attempts.entry(ip.to_string()).or_insert(Attempt {
             count: 0,
@@ -60,7 +69,7 @@ pub fn record_attempt(ip: &str) -> Attempt {
 
 /// Clear the attempt record for the given IP (e.g. after a successful login).
 pub fn reset_attempts(ip: &str) {
-    if let Ok(mut attempts) = login_attempts().lock() {
+    if let Ok(mut attempts) = login_attempts().write() {
         attempts.remove(ip);
     }
 }
@@ -68,7 +77,7 @@ pub fn reset_attempts(ip: &str) {
 /// Seconds remaining in the lockout for the given IP, or 0 if not locked out.
 #[must_use]
 pub fn lockout_remaining_secs(ip: &str, lockout_duration: std::time::Duration) -> u64 {
-    if let Ok(attempts) = login_attempts().lock()
+    if let Ok(attempts) = login_attempts().read()
         && let Some(attempt) = attempts.get(ip)
     {
         let elapsed = attempt.last_attempt.elapsed();
@@ -86,7 +95,7 @@ pub fn lockout_remaining_secs(ip: &str, lockout_duration: std::time::Duration) -
 /// [`is_locked_out`]).
 #[must_use]
 pub fn current_attempts(ip: &str) -> u32 {
-    if let Ok(attempts) = login_attempts().lock()
+    if let Ok(attempts) = login_attempts().read()
         && let Some(attempt) = attempts.get(ip)
     {
         return attempt.count;

@@ -5,7 +5,7 @@ use std::sync::Mutex;
 static ATTEMPTS_LOCK: Mutex<()> = Mutex::new(());
 
 fn reset_for_test() -> std::sync::MutexGuard<'static, ()> {
-    if let Ok(mut map) = login_attempts().lock() {
+    if let Ok(mut map) = login_attempts().write() {
         map.clear();
     }
     ATTEMPTS_LOCK.lock().unwrap_or_else(|e| e.into_inner())
