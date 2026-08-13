@@ -4,6 +4,7 @@ members = [
     "shared-core",
     "shared-backend",
     "shared-frontend",
+    "xtask",
 ]
 
 [workspace.package]
