@@ -3,3 +3,8 @@ name = "xtask"
 version = "0.1.0"
 edition = "2024"
 publish = false
+
+[dependencies]
+ignore = "0.4.33"
+md-5 = "0.11.0"
+regex = "1.13.1"
